@@ -1,0 +1,102 @@
+#!/usr/bin/perl
+
+# mugnifier - (mutt) offline mailcap viewer
+#
+# Authors:
+#   Thomas Liske <thomas@fiasko-nw.net>
+#
+# Copyright Holder:
+#   2015 (C) Thomas Liske [http://fiasko-nw.net/~thomas/]
+#
+# License:
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this package; if not, write to the Free Software
+#   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+#
+
+use Glib::Object::Introspection;
+use URI;
+
+use warnings;
+use strict;
+
+
+# gir initialization
+Glib::Object::Introspection->setup(
+    basename => 'Gtk',
+    version => '3.0',
+    package => 'Gtk3');
+
+Glib::Object::Introspection->setup(
+    basename => 'WebKit',
+    version => '3.0',
+    package => 'WebKit');
+
+
+# GUI initialization
+Gtk3::init;
+my $window = Gtk3::Window->new('toplevel');
+my $scrolls = Gtk3::ScrolledWindow->new;
+my $view = WebKit::WebView->new;
+
+$scrolls->add($view);
+$window->add($scrolls);
+$window->show_all;
+$window->signal_connect(destroy => sub { Gtk3->main_quit });
+
+
+# URI handling
+my $uri = URI->new(shift);
+my $uri_hp = eval { $uri->host_port; };
+my %allowed;
+$allowed{$uri_hp}++ if($uri_hp);
+
+unless($uri->has_recognized_scheme) {
+    print STDERR "ERROR: missing or unsupported scheme in URI!\n";
+    exit 1;
+}
+
+# check if a request should pass
+sub check_request {
+    my $req = shift;
+    my $req_hp = eval { $req->host_port; };
+
+    # requests of the original URI should always pass
+    return 1 if($uri->eq($req));
+
+    # allow whitelist
+    return $allowed{$req_hp} if($req_hp);
+
+    # deny any any
+    return 0;
+}
+
+# intercept any resource requests
+$view->signal_connect('resource-request-starting' => sub {
+    my ($view, $frame, $resource, $request, $response) = @_;
+
+    my $requri = URI->new($request->get_uri, $uri->scheme);
+    if(check_request($requri)) {
+	print STDERR "ALLOWED: ".$request->get_uri."\n";
+	return;
+    }
+
+    print STDERR "DENIED: ".$request->get_uri."\n";
+    $request->set_uri('about:blank');
+});
+
+# load initial site
+$view->load_uri($uri->as_string);
+
+# main loop
+Gtk3->main;
