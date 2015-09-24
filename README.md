@@ -13,6 +13,7 @@ content of HTML mails.
 Prerequisites
 -------------
 
+Browser::Open
 Glib::Object::Introspection
 URI
 

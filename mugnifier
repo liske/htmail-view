@@ -24,6 +24,7 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
+use Browser::Open qw(open_browser);
 use Glib::Object::Introspection;
 use URI;
 
@@ -44,12 +45,13 @@ Glib::Object::Introspection->setup(
 
 
 # GUI initialization
-Gtk3::init;
+Gtk3::init(\@ARGV);
 my $window = Gtk3::Window->new('toplevel');
 my $scrolls = Gtk3::ScrolledWindow->new;
 my $view = WebKit::WebView->new;
 
 $scrolls->add($view);
+$window->set_default_size(762, 724);
 $window->add($scrolls);
 $window->show_all;
 $window->signal_connect(destroy => sub { Gtk3->main_quit });
@@ -93,6 +95,30 @@ $view->signal_connect('resource-request-starting' => sub {
 
     print STDERR "DENIED: ".$request->get_uri."\n";
     $request->set_uri('about:blank');
+});
+
+sub check_navpol {
+    my $req = shift;
+    my $req_hp = eval { $req->host_port; };
+
+    # requests of the original URI should always pass
+    return 1 if($uri->eq($req));
+
+    # any else should launch the external browser
+    return 0;
+}
+
+$view->signal_connect('navigation-policy-decision-requested' => sub {
+    my ($view, $frame, $request, $action, $decision) = @_;
+
+    my $requri = URI->new($request->get_uri, $uri->scheme);
+    return 0 if(check_navpol($requri));
+
+    # launch external browser
+    open_browser($request->get_uri);
+    
+    $decision->ignore;
+    return 1;
 });
 
 # load initial site
