@@ -31,6 +31,8 @@ use URI;
 use warnings;
 use strict;
 
+my %allowed;
+my $allowall = 0;
 
 # gir initialization
 Glib::Object::Introspection->setup(
@@ -60,25 +62,23 @@ $toolbar->set_valign('GTK_ALIGN_START');
 $toolbar->set_halign('GTK_ALIGN_START');
 $toolbar->set_icon_size('GTK_ICON_SIZE_SMALL_TOOLBAR');
 
-my $btn_permit = Gtk3::ToolButton->new;
-$btn_permit->set_label("Allow...");
-$btn_permit->set_icon_name('gtk-dialog-warning');
-$btn_permit->set_tooltip_text('Allow external resources...');
-
-my $btn_open = Gtk3::ToolButton->new;
-$btn_open->set_label("Browser");
-$btn_open->set_icon_name('gtk-network');
-$btn_permit->set_tooltip_text('Open view in browser.');
-
 my $btn_close = Gtk3::ToolButton->new;
 $btn_close->set_label("Close");
 $btn_close->set_icon_name('gtk-quit');
 $btn_close->set_tooltip_text('Close this view.');
+$btn_close->signal_connect(clicked => sub { Gtk3::main_quit(); });
+
+my $btn_network = Gtk3::ToggleToolButton->new;
+$btn_network->set_label('External');
+$btn_network->set_icon_name('gtk-network');
+$btn_network->set_tooltip_text('Allow all external resources...');
+$btn_network->signal_connect(toggled => sub {
+    $allowall = $btn_network->get_active || 0;
+    $view->reload;
+			     });
 
 $toolbar->insert($btn_close, 0);
-$toolbar->insert((Gtk3::SeparatorToolItem->new), 1);
-$toolbar->insert($btn_permit, 2);
-$toolbar->insert($btn_open, 3);
+$toolbar->insert($btn_network, 1);
 
 
 $window->set_default_size(762, 724);
@@ -86,13 +86,12 @@ $box->add($scrolls);
 $box->add_overlay($toolbar);
 $window->add($box);
 $window->show_all;
-$window->signal_connect(destroy => sub { Gtk3->main_quit });
+$window->signal_connect(destroy => sub { Gtk3::main_quit(); });
 
 
 # URI handling
 my $uri = URI->new(shift);
 my $uri_hp = eval { $uri->host_port; };
-my %allowed;
 $allowed{$uri_hp}++ if($uri_hp);
 
 unless($uri->has_recognized_scheme) {
@@ -106,7 +105,7 @@ sub check_request {
     my $req_hp = eval { $req->host_port; };
 
     # requests of the original URI should always pass
-    return 1 if($uri->eq($req));
+    return 1 if($allowall || $uri->eq($req));
 
     # allow whitelist
     return $allowed{$req_hp} if($req_hp);
@@ -157,4 +156,4 @@ $view->signal_connect('navigation-policy-decision-requested' => sub {
 $view->load_uri($uri->as_string);
 
 # main loop
-Gtk3->main;
+Gtk3::main();
