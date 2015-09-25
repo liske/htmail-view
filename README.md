@@ -39,13 +39,13 @@ Usage
 
 `~/.muttrc`
 ```ini
-# show text/html using auto_view
+# auto convert text/html MIME type to text/plain
 auto_view text/html
 
-# prefare plain text
+# prefer plain text
 alternative_order text/plain text/enriched text/html
 
-# run mailcap stuff by <return> in attach view
+# run viewer defined in mailcap  by <return> in attach view
 bind attach <return> view-mailcap
 
 # mailcap file to use
