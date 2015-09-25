@@ -63,14 +63,17 @@ $toolbar->set_icon_size('GTK_ICON_SIZE_SMALL_TOOLBAR');
 my $btn_permit = Gtk3::ToolButton->new;
 $btn_permit->set_label("Allow...");
 $btn_permit->set_icon_name('gtk-dialog-warning');
+$btn_permit->set_tooltip_text('Allow external resources...');
 
 my $btn_open = Gtk3::ToolButton->new;
 $btn_open->set_label("Browser");
 $btn_open->set_icon_name('gtk-network');
+$btn_permit->set_tooltip_text('Open view in browser.');
 
 my $btn_close = Gtk3::ToolButton->new;
 $btn_close->set_label("Close");
 $btn_close->set_icon_name('gtk-quit');
+$btn_close->set_tooltip_text('Close this view.');
 
 $toolbar->insert($btn_close, 0);
 $toolbar->insert((Gtk3::SeparatorToolItem->new), 1);
