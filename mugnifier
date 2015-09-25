@@ -53,20 +53,26 @@ my $scrolls = Gtk3::ScrolledWindow->new;
 my $view = WebKit::WebView->new;
 $scrolls->add($view);
 
+
 my $toolbar = Gtk3::Toolbar->new;
+
 my $btn_permit = Gtk3::ToolButton->new;
-#$btn_permit->set_stock_id('GTK_STOCK_OK');
 $btn_permit->set_label("Allow...");
+$btn_permit->set_icon_name('gtk-dialog-error');
+
 my $btn_open = Gtk3::ToolButton->new;
-$btn_open->set_label("Open");
-#$btn_open->set_stock_id('GTK_STOCK_NETWORK');
+$btn_open->set_label("Browser");
+$btn_open->set_icon_name('gtk-dnd');
+
 my $btn_close = Gtk3::ToolButton->new;
 $btn_close->set_label("Close");
-#$btn_close->set_stock_id('GTK_STOCK_CLOSE');
+$btn_close->set_icon_name('gtk-quit');
+
 $toolbar->insert($btn_close, 0);
 $toolbar->insert((Gtk3::SeparatorToolItem->new), 1);
 $toolbar->insert($btn_permit, 2);
 $toolbar->insert($btn_open, 3);
+
 
 $window->set_default_size(762, 724);
 $box->pack_start($toolbar, 0, 0, 0);
@@ -108,11 +114,11 @@ $view->signal_connect('resource-request-starting' => sub {
 
     my $requri = URI->new($request->get_uri, $uri->scheme);
     if(check_request($requri)) {
-	print STDERR "ALLOWED: ".$request->get_uri."\n";
+#	print STDERR "ALLOWED: ".$request->get_uri."\n";
 	return;
     }
 
-    print STDERR "DENIED: ".$request->get_uri."\n";
+#    print STDERR "DENIED: ".$request->get_uri."\n";
     $request->set_uri('about:blank');
 });
 
