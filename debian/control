@@ -1,0 +1,19 @@
+Source: calmium
+Section: web
+Priority: optional
+Maintainer: Thomas Liske <thomas@fiasko-nw.net>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: https://github.com/liske/calmium
+
+Package: calmium
+Architecture: all
+Depends: libbrowser-open-perl, liburi-perl, libglib-object-introspection-perl, ${misc:Depends}
+Description: single web page renderer based on WebKit
+ Web page renderer based on WebKit. In contrast to a ordenary WebKit-based
+ browser, calmium will prevent loading remote content while showing a single
+ web page (i.e. from a local file).
+ 
+ It was written to be called from mutt to view HTML mails. It tries to
+ protect the users privacy by not loading remote resources. The default
+ browser will be used if the user follows a link.
