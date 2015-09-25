@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# mugnifier - (mutt) offline mailcap viewer
+# calmium - single web page renderer based on WebKit
 #
 # Authors:
 #   Thomas Liske <thomas@fiasko-nw.net>
@@ -49,6 +49,8 @@ Glib::Object::Introspection->setup(
 # GUI initialization
 Gtk3::init(\@ARGV);
 my $window = Gtk3::Window->new('toplevel');
+$window->set_wmclass('calmium', 'Calmium');
+$window->set_role('browser');
 my $box = Gtk3::Overlay->new;
 
 my $scrolls = Gtk3::ScrolledWindow->new;
