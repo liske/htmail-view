@@ -27,5 +27,33 @@ Prerequisites
 Installation
 ------------
 
-TBD
+*calmium* is a self-contained perl script. On *Debian GNU/Linux* you could use the prepared **.deb** packages (see github releases).
 
+
+Usage
+-----
+
+
+### Mutt
+
+
+`~/.muttrc`
+```ini
+# show text/html using auto_view
+auto_view text/html
+
+# prefare plain text
+alternative_order text/plain text/enriched text/html
+
+# run mailcap stuff by <return> in attach view
+bind attach <return> view-mailcap
+
+# mailcap file to use
+set mailcap_path="~/.mutt/mailcap"
+```
+
+`~/.mutt/mailcap`
+```bash
+text/html; calmium file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal;
+text/html; w3m -I %{charset} -T text/html; copiousoutput;
+```
