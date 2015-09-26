@@ -118,6 +118,7 @@ unless($uri->has_recognized_scheme) {
 my $window = Gtk3::Window->new('toplevel');
 $window->set_wmclass('calmium', 'Calmium');
 $window->set_role('browser');
+$window->set_title($uri->as_string." - Calmium");
 my $box = Gtk3::Overlay->new;
 
 my $scrolls = Gtk3::ScrolledWindow->new;
@@ -174,6 +175,13 @@ sub check_request {
     # deny any any
     return 0;
 }
+
+# window title
+$view->signal_connect('title-changed' => sub {
+    my ($view, $frame, $text) = @_;
+
+    $window->set_title("$text - Calmium");
+});
 
 # intercept any resource requests
 $view->signal_connect('resource-request-starting' => sub {
