@@ -128,9 +128,8 @@ $scrolls->add($view);
 
 
 my $toolbar = Gtk3::Toolbar->new;
-$toolbar->set_halign('GTK_ALIGN_START');
+$toolbar->set_halign('GTK_ALIGN_CENTER');
 $toolbar->set_valign('GTK_ALIGN_START');
-$toolbar->set_halign('GTK_ALIGN_START');
 $toolbar->set_icon_size('GTK_ICON_SIZE_SMALL_TOOLBAR');
 
 my $btn_close = Gtk3::ToolButton->new;
