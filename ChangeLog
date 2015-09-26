@@ -5,6 +5,7 @@ calmium (0.2) unstable; urgency=low
   * Add verbose mode.
   * Ignore policy requests not triggered by link-clicked.
   * Set reasonable window title.
+  * Set a window icon (Standard Category Icon).
 
  -- Thomas Liske <thomas@fiasko-nw.net>  
 
