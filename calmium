@@ -121,11 +121,15 @@ $window->set_role('browser');
 $window->set_title($uri->as_string." - Calmium");
 $window->set_icon_name('text-html');
 my $box = Gtk3::Overlay->new;
+my $box2 = Gtk3::Overlay->new;
 
 my $scrolls = Gtk3::ScrolledWindow->new;
 my $view = WebKit::WebView->new;
 $scrolls->add($view);
 
+my $label = Gtk3::Label->new('');
+$label->set_halign('GTK_ALIGN_CENTER');
+$label->set_valign('GTK_ALIGN_END');
 
 my $toolbar = Gtk3::Toolbar->new;
 $toolbar->set_halign('GTK_ALIGN_CENTER');
@@ -153,7 +157,10 @@ $toolbar->insert($btn_network, 1);
 my $accel = Gtk3::AccelGroup->new;
 $window->add_accel_group($accel);
 $window->set_default_size(762, 724);
-$box->add($scrolls);
+
+$box2->add($scrolls);
+$box2->add_overlay($label);
+$box->add($box2);
 $box->add_overlay($toolbar);
 $window->add($box);
 $window->show_all;
@@ -181,6 +188,13 @@ $view->signal_connect('title-changed' => sub {
     my ($view, $frame, $text) = @_;
 
     $window->set_title("$text - Calmium");
+});
+
+# show destination while hovering a link
+$view->signal_connect('hovering-over-link' => sub {
+    my ($view, $title, $uri) = @_;
+
+    $label->set_label($uri || '');
 });
 
 # intercept any resource requests
