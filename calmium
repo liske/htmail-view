@@ -25,14 +25,17 @@
 #
 
 use Browser::Open qw(open_browser);
+use Getopt::Std;
 use Glib::Object::Introspection;
 use URI;
 
 use warnings;
 use strict;
 
+my $version = 0.2;
 my %allowed;
 my $allowall = 0;
+
 
 # gir initialization
 Glib::Object::Introspection->setup(
@@ -46,8 +49,72 @@ Glib::Object::Introspection->setup(
     package => 'WebKit');
 
 
-# GUI initialization
+# initialize GTK and parse GTK standard command line options
 Gtk3::init(\@ARGV);
+
+
+# getopt stuff
+$Getopt::Std::STANDARD_HELP_VERSION++;
+
+sub HELP_MESSAGE {
+    print <<USG;
+Usage:
+
+  calmium [-v] <url>
+
+    -v		be more verbose
+
+    --help      show this help
+    --version   show version information
+
+    The <url> requires to contain a scheme. Showing local HTML files
+    requires to use the "file://" scheme.
+
+USG
+}
+
+sub VERSION_MESSAGE {
+    print <<LIC;
+
+ calmium $version - single web page renderer based on WebKit
+
+ Authors:
+   Thomas Liske <thomas\@fiasko-nw.net>
+
+ Copyright Holder:
+   2015 (C) Thomas Liske [http://fiasko-nw.net/~thomas/]
+
+Upstream:
+  https://github.com/liske/calmium
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+LIC
+#/
+}
+
+our $opt_v;
+unless(getopts('v') && (scalar @ARGV) != 0) {
+    HELP_MESSAGE;
+    exit 1;
+}
+
+
+# prepare supplied URL
+my $uri = URI->new(shift);
+my $uri_hp = eval { $uri->host_port; };
+$allowed{$uri_hp}++ if($uri_hp);
+
+unless($uri->has_recognized_scheme) {
+    print STDERR "ERROR: missing or unsupported scheme in URI!\n";
+    exit 1;
+}
+
+
+# GUI initialization
 my $window = Gtk3::Window->new('toplevel');
 $window->set_wmclass('calmium', 'Calmium');
 $window->set_role('browser');
@@ -92,15 +159,6 @@ $window->show_all;
 $window->signal_connect(destroy => sub { Gtk3::main_quit(); });
 $btn_close->add_accelerator("clicked", $accel, ord('Q'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
 
-# URI handling
-my $uri = URI->new(shift);
-my $uri_hp = eval { $uri->host_port; };
-$allowed{$uri_hp}++ if($uri_hp);
-
-unless($uri->has_recognized_scheme) {
-    print STDERR "ERROR: missing or unsupported scheme in URI!\n";
-    exit 1;
-}
 
 # check if a request should pass
 sub check_request {
@@ -123,11 +181,11 @@ $view->signal_connect('resource-request-starting' => sub {
 
     my $requri = URI->new($request->get_uri, $uri->scheme);
     if(check_request($requri)) {
-#	print STDERR "ALLOWED: ".$request->get_uri."\n";
+	print STDERR "RES-REQ#PERMIT ".$request->get_uri."\n" if($opt_v);
 	return;
     }
 
-#    print STDERR "DENIED: ".$request->get_uri."\n";
+    print STDERR "RES-REQ#REJECT ".$request->get_uri."\n" if($opt_v);
     $request->set_uri('about:blank');
 });
 
@@ -146,10 +204,20 @@ $view->signal_connect('navigation-policy-decision-requested' => sub {
     my ($view, $frame, $request, $action, $decision) = @_;
 
     my $requri = URI->new($request->get_uri, $uri->scheme);
-    return 0 if(check_navpol($requri));
+    if(check_navpol($requri)) {
+	print STDERR "NAV-POL#INTERN ".$request->get_uri."\n" if($opt_v);
+	return 0;
+    }
 
-    # launch external browser
-    open_browser($request->get_uri);
+    if($action->get_reason eq 'link-clicked') {
+	# launch external browser
+	print STDERR "NAV-POL#EXTERN ".$request->get_uri."\n" if($opt_v);
+	open_browser($request->get_uri);
+    }
+    else {
+	# ignore request (user has not clicked)
+	print STDERR "NAV-POL#IGNORE ".$request->get_uri."\n" if($opt_v);
+    }
     
     $decision->ignore;
     return 1;

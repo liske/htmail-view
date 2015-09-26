@@ -1,6 +1,9 @@
 calmium (0.2) unstable; urgency=low
 
   * Terminat on 'q' key-press.
+  * Add getopts handling.
+  * Add verbose mode.
+  * Ignore policy requests not triggered by link-clicked.
 
  -- Thomas Liske <thomas@fiasko-nw.net>  
 
