@@ -82,14 +82,15 @@ $btn_network->signal_connect(toggled => sub {
 $toolbar->insert($btn_close, 0);
 $toolbar->insert($btn_network, 1);
 
-
+my $accel = Gtk3::AccelGroup->new;
+$window->add_accel_group($accel);
 $window->set_default_size(762, 724);
 $box->add($scrolls);
 $box->add_overlay($toolbar);
 $window->add($box);
 $window->show_all;
 $window->signal_connect(destroy => sub { Gtk3::main_quit(); });
-
+$btn_close->add_accelerator("clicked", $accel, ord('Q'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
 
 # URI handling
 my $uri = URI->new(shift);

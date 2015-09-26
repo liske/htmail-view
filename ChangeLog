@@ -1,3 +1,9 @@
+calmium (0.2) unstable; urgency=low
+
+  * Terminat on 'q' key-press.
+
+ -- Thomas Liske <thomas@fiasko-nw.net>  
+
 calmium (0.1) unstable; urgency=low
 
   * Initial Release.
