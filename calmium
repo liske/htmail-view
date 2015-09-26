@@ -119,7 +119,7 @@ my $window = Gtk3::Window->new('toplevel');
 $window->set_wmclass('calmium', 'Calmium');
 $window->set_role('browser');
 $window->set_title($uri->as_string." - Calmium");
-$window->set_icon_name('applications-internet');
+$window->set_icon_name('text-html');
 my $box = Gtk3::Overlay->new;
 
 my $scrolls = Gtk3::ScrolledWindow->new;
