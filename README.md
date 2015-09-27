@@ -52,8 +52,20 @@ bind attach <return> view-mailcap
 set mailcap_path="~/.mutt/mailcap"
 ```
 
+
+#### Use htmail-view for text/html parts
+
 `~/.mutt/mailcap`
 ```bash
 text/html; htmail-view file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal;
+text/html; w3m -I %{charset} -T text/html; copiousoutput;
+```
+
+
+#### Use wmctrl wrapper (focus handling)
+
+`~/.mutt/mailcap`
+```bash
+text/html; /usr/lib/htmail-view/wmctrl-wrapper file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal;
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
 ```

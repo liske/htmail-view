@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Save current winid
+d=$(dirname "$0")
+winid=$($d/wmctrl-winid)
+
+# Launch HTMaiL-view
+htmail-view $@
+
+# Refocus
+wmctrl -ia "$winid"

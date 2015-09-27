@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Check if wmctrl is available
+if ! which wmctrl >/dev/null 2>&1; then
+  echo 'ERROR: wmctrl is missing!' 1>&2
+  exit 1
+fi
+
+# Save current window ID
+wmctrl -a :ACTIVE: -v 2>&1 | awk 'BEGIN { exit_status = 1 }
+         /^Using window:/ { print $3; exit_status = 0; exit } 
+         END { exit exit_status }' \
+|| exit 1

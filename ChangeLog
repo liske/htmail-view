@@ -1,11 +1,12 @@
 htmail-view (0.2) unstable; urgency=low
 
-  * Add getopts handling.
-  * Add verbose mode.
-  * Ignore policy requests not triggered by link-clicked.
   * Add accelerator keys:
 	- q: quit htmail-view
 	- r: toggle remote resources
+  * Add getopts handling.
+  * Add verbose mode.
+  * Add wmctrl wrapper (focus handling).
+  * Ignore policy requests not triggered by link-clicked.
   * Improve window handling:
 	- set reasonable title
 	- use a standard icon
