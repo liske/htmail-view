@@ -23,7 +23,7 @@ Prerequisites
  - Glib::Object::Introspection
  - URI
 
-- wmctrl (optional; use by wmctrl-wrapper)
+- wmctrl (optional; used by wmctrl-wrapper)
 
 
 Installation
