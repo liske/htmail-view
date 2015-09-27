@@ -164,6 +164,7 @@ $box->add($box2);
 $box->add_overlay($toolbar);
 $window->add($box);
 $window->show_all;
+$window->present;
 $window->signal_connect(destroy => sub { Gtk3::main_quit(); });
 
 $btn_close->add_accelerator("clicked", $accel, ord('Q'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
