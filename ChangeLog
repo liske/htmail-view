@@ -1,9 +1,11 @@
 calmium (0.2) unstable; urgency=low
 
-  * Terminat on 'q' key-press.
   * Add getopts handling.
   * Add verbose mode.
   * Ignore policy requests not triggered by link-clicked.
+  * Add accelerator keys:
+	- q: quit calmium
+	- r: toggle remote resources
   * Improve window handling:
 	- set reasonable title
 	- use a standard icon

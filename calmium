@@ -137,13 +137,13 @@ $toolbar->set_valign('GTK_ALIGN_START');
 $toolbar->set_icon_size('GTK_ICON_SIZE_SMALL_TOOLBAR');
 
 my $btn_close = Gtk3::ToolButton->new;
-$btn_close->set_label("Close");
+$btn_close->set_label("Quit");
 $btn_close->set_icon_name('gtk-quit');
 $btn_close->set_tooltip_text('Close this view.');
 $btn_close->signal_connect(clicked => sub { Gtk3::main_quit(); });
 
 my $btn_network = Gtk3::ToggleToolButton->new;
-$btn_network->set_label('External');
+$btn_network->set_label('Remote Content');
 $btn_network->set_icon_name('gtk-network');
 $btn_network->set_tooltip_text('Allow all external resources...');
 $btn_network->signal_connect(toggled => sub {
@@ -165,7 +165,9 @@ $box->add_overlay($toolbar);
 $window->add($box);
 $window->show_all;
 $window->signal_connect(destroy => sub { Gtk3::main_quit(); });
+
 $btn_close->add_accelerator("clicked", $accel, ord('Q'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
+$btn_network->get_child->add_accelerator("clicked", $accel, ord('R'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
 
 
 # check if a request should pass
