@@ -1,6 +1,7 @@
 htmail-view (0.3) unstable; urgency=low
 
   * Add mime-support file (Debian).
+  * Enable WebKit privacy settings.
 
 -- Thomas Liske <thomas@fiasko-nw.net>  
 

@@ -171,6 +171,15 @@ $btn_close->add_accelerator("clicked", $accel, ord('Q'), 'GDK_META_MASK', 'GTK_A
 $btn_network->get_child->add_accelerator("clicked", $accel, ord('R'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
 
 
+# WebKit privacy tuning
+my $settings = $view->get_settings;
+$settings->set('enable-plugins', 0);
+$settings->set('enable-fullscreen', 0);
+$settings->set('enable-html5-local-storage', 0);
+$settings->set('enable-html5-database', 0);
+$settings->set('enable-dns-prefetching', 0);
+$settings->set('enable-private-browsing', 1);
+
 # check if a request should pass
 sub check_request {
     my $req = shift;
