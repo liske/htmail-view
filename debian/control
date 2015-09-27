@@ -1,18 +1,18 @@
-Source: calmium
+Source: htmail-view
 Section: web
 Priority: optional
 Maintainer: Thomas Liske <thomas@fiasko-nw.net>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.5
-Homepage: https://github.com/liske/calmium
+Homepage: https://github.com/liske/htmail-view
 
-Package: calmium
+Package: htmail-view
 Architecture: all
 Depends: libbrowser-open-perl, liburi-perl, libglib-object-introspection-perl, gir1.2-gtk-3.0, gir1.2-webkit-3.0, ${misc:Depends}
 Description: single web page renderer based on WebKit
  Web page renderer based on WebKit. In contrast to a ordenary WebKit-based
- browser, calmium will prevent loading remote content while showing a single
- web page (i.e. from a local file).
+ browser, htmail-view will prevent loading remote content while showing a
+ single web page (i.e. from a local file).
  .
  It was written to be called from mutt to view HTML mails. It tries to
  protect the users privacy by not loading remote resources. The default

@@ -1,6 +1,6 @@
 *~
 debian/*.ex
-debian/calmium.debhelper.log
-debian/calmium.substvars
-debian/calmium/
+debian/htmail-view.debhelper.log
+debian/htmail-view.substvars
+debian/htmail-view/
 debian/files

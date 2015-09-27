@@ -1,19 +1,20 @@
-calmium (0.2) unstable; urgency=low
+htmail-view (0.2) unstable; urgency=low
 
   * Add getopts handling.
   * Add verbose mode.
   * Ignore policy requests not triggered by link-clicked.
   * Add accelerator keys:
-	- q: quit calmium
+	- q: quit htmail-view
 	- r: toggle remote resources
   * Improve window handling:
 	- set reasonable title
 	- use a standard icon
 	- show destinitations of links
+  * Rename project to htmail-view.
 
  -- Thomas Liske <thomas@fiasko-nw.net>  
 
-calmium (0.1) unstable; urgency=low
+htmail-view (0.1) unstable; urgency=low
 
   * Initial Release.
 

@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: calmium
-Source: https://github.com/liske/calmium
+Upstream-Name: htmail-view
+Source: https://github.com/liske/htmail-view
 
 Files: *
 Copyright: 2015 Thomas Liske <thomas@fiasko-nw.net>

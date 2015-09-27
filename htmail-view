@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# calmium - single web page renderer based on WebKit
+# HTMaiL-view - single web page renderer based on WebKit
 #
 # Authors:
 #   Thomas Liske <thomas@fiasko-nw.net>
@@ -60,7 +60,7 @@ sub HELP_MESSAGE {
     print <<USG;
 Usage:
 
-  calmium [-v] <url>
+  htmail-view [-v] <url>
 
     -v		be more verbose
 
@@ -76,7 +76,7 @@ USG
 sub VERSION_MESSAGE {
     print <<LIC;
 
- calmium $version - single web page renderer based on WebKit
+ htmail-view $version - single web page renderer based on WebKit
 
  Authors:
    Thomas Liske <thomas\@fiasko-nw.net>
@@ -85,7 +85,7 @@ sub VERSION_MESSAGE {
    2015 (C) Thomas Liske [http://fiasko-nw.net/~thomas/]
 
 Upstream:
-  https://github.com/liske/calmium
+  https://github.com/liske/htmail-view
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -116,9 +116,9 @@ unless($uri->has_recognized_scheme) {
 
 # GUI initialization
 my $window = Gtk3::Window->new('toplevel');
-$window->set_wmclass('calmium', 'Calmium');
+$window->set_wmclass('htmail-view', 'HTMaiL-View');
 $window->set_role('browser');
-$window->set_title($uri->as_string." - Calmium");
+$window->set_title($uri->as_string." - HTMaiL-View");
 $window->set_icon_name('text-html');
 my $box = Gtk3::Overlay->new;
 my $box2 = Gtk3::Overlay->new;
@@ -189,7 +189,7 @@ sub check_request {
 $view->signal_connect('title-changed' => sub {
     my ($view, $frame, $text) = @_;
 
-    $window->set_title("$text - Calmium");
+    $window->set_title("$text - HTMaiL-View");
 });
 
 # show destination while hovering a link

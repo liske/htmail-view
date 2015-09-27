@@ -1,11 +1,11 @@
-calmium
-=======
+htmail-view
+===========
 
 About
 -----
 
 Web page renderer based on WebKit. In contrast to a ordenary WebKit-based
-browser, *calmium* will prevent loading remote content while showing
+browser, *htmail-view* will prevent loading remote content while showing
 a single web page (i.e. from a local file).
 
 It was written to be called from *mutt* to view HTML mails. It tries to
@@ -27,7 +27,7 @@ Prerequisites
 Installation
 ------------
 
-*calmium* is a self-contained perl script. On *Debian GNU/Linux* you could use the prepared **.deb** packages (see github releases).
+*htmail-view* is a self-contained perl script. On *Debian GNU/Linux* you could use the prepared **.deb** packages (see github releases).
 
 
 Usage
@@ -54,6 +54,6 @@ set mailcap_path="~/.mutt/mailcap"
 
 `~/.mutt/mailcap`
 ```bash
-text/html; calmium file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal;
+text/html; htmail-view file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal;
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
 ```
