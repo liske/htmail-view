@@ -1,19 +1,20 @@
 htmail-view (0.2) unstable; urgency=low
 
   * Add accelerator keys:
-	- q: quit htmail-view
-	- r: toggle remote resources
+    - q: quit htmail-view
+    - r: toggle remote resources
   * Add getopts handling.
   * Add verbose mode.
   * Add wmctrl wrapper (focus handling).
   * Ignore policy requests not triggered by link-clicked.
   * Improve window handling:
-	- set reasonable title
-	- use a standard icon
-	- show destinitations of links
+    - bring to front on start
+    - set reasonable title
+    - show destinitations of links
+    - use a standard icon
   * Rename project to htmail-view.
 
- -- Thomas Liske <thomas@fiasko-nw.net>  
+ -- Thomas Liske <thomas@fiasko-nw.net>  Sun, 27 Sep 2015 11:58:45 +0200
 
 htmail-view (0.1) unstable; urgency=low
 
