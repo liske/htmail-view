@@ -1,0 +1,1 @@
+text/html; /usr/lib/htmail-view/wmctrl-wrapper file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal; priority=4
