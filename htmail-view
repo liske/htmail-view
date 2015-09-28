@@ -200,7 +200,7 @@ sub check_request {
     return 1 if($hp_allowall || $uri->eq($req));
 
     # allow whitelist
-    return $hp_allowed{$req_hp} if($req_hp);
+    return $hp_allowed{$req_hp} || 0 if($req_hp);
 
     # deny any any
     return 0;
