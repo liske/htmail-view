@@ -33,9 +33,17 @@ use warnings;
 use strict;
 
 my $version = 0.2;
-my %allowed;
-my $allowall = 0;
+my %hp_allowed;
+my $hp_allowall = 0;
 
+my %webkit_settings = (
+    q(enable-plugins) => 0,
+    q(enable-fullscreen) => 0,
+    q(enable-html5-local-storage) => 0,
+    q(enable-html5-database) => 0,
+    q(enable-dns-prefetching) => 0,
+    q(enable-private-browsing) => 1,
+    );
 
 # gir initialization
 Glib::Object::Introspection->setup(
@@ -106,7 +114,7 @@ unless(getopts('v') && (scalar @ARGV) != 0) {
 # prepare supplied URL
 my $uri = URI->new(shift);
 my $uri_hp = eval { $uri->host_port; };
-$allowed{$uri_hp}++ if($uri_hp);
+$hp_allowed{$uri_hp}++ if($uri_hp);
 
 unless($uri->has_recognized_scheme) {
     print STDERR "ERROR: missing or unsupported scheme in URI!\n";
@@ -147,7 +155,7 @@ $btn_network->set_label('Remote Content');
 $btn_network->set_icon_name('gtk-network');
 $btn_network->set_tooltip_text('Allow all external resources...');
 $btn_network->signal_connect(toggled => sub {
-    $allowall = $btn_network->get_active || 0;
+    $hp_allowall = $btn_network->get_active || 0;
     $view->reload;
 			     });
 
@@ -173,12 +181,10 @@ $btn_network->get_child->add_accelerator("clicked", $accel, ord('R'), 'GDK_META_
 
 # WebKit privacy tuning
 my $settings = $view->get_settings;
-$settings->set('enable-plugins', 0);
-$settings->set('enable-fullscreen', 0);
-$settings->set('enable-html5-local-storage', 0);
-$settings->set('enable-html5-database', 0);
-$settings->set('enable-dns-prefetching', 0);
-$settings->set('enable-private-browsing', 1);
+foreach my $option (sort keys %webkit_settings) {
+    print STDERR "SETTING#WEBKIT $option ".$settings->get($option)." => $webkit_settings{$option}\n" if($opt_v);
+    $settings->set($option, $webkit_settings{$option});
+}
 
 # check if a request should pass
 sub check_request {
@@ -186,10 +192,10 @@ sub check_request {
     my $req_hp = eval { $req->host_port; };
 
     # requests of the original URI should always pass
-    return 1 if($allowall || $uri->eq($req));
+    return 1 if($hp_allowall || $uri->eq($req));
 
     # allow whitelist
-    return $allowed{$req_hp} if($req_hp);
+    return $hp_allowed{$req_hp} if($req_hp);
 
     # deny any any
     return 0;
