@@ -267,6 +267,31 @@ $view->signal_connect('navigation-policy-decision-requested' => sub {
     return 1;
 });
 
+# <a target="_blank"> stuff
+$view->signal_connect('new-window-policy-decision-requested' => sub {
+    my ($view, $frame, $request, $action, $decision) = @_;
+
+    my $requri = URI->new($request->get_uri, $uri->scheme);
+    if(check_navpol($requri)) {
+	print STDERR "NEW-POL#INTIGN ".$request->get_uri."\n" if($opt_v);
+	$decision->ignore;
+	return 1;
+    }
+
+    if($action->get_reason eq 'link-clicked') {
+	# launch external browser
+	print STDERR "NEW-POL#EXTERN ".$request->get_uri."\n" if($opt_v);
+	open_browser($request->get_uri);
+    }
+    else {
+	# ignore request (user has not clicked)
+	print STDERR "NEW-POL#IGNORE ".$request->get_uri."\n" if($opt_v);
+    }
+
+    $decision->ignore;
+    return 1;
+		      });
+
 # load initial site
 $view->load_uri($uri->as_string);
 

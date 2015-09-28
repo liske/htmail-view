@@ -2,6 +2,7 @@ htmail-view (0.3) unstable; urgency=low
 
   * Add mime-support file (Debian).
   * Enable WebKit privacy settings.
+  * [Bug] Fix links with @target="_blank" did nothing.
 
 -- Thomas Liske <thomas@fiasko-nw.net>  
 
