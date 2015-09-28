@@ -236,7 +236,6 @@ $view->signal_connect('resource-request-starting' => sub {
 
 sub check_navpol {
     my $req = shift;
-    my $req_hp = eval { $req->host_port; };
 
     # requests of the original URI should always pass
     return 1 if($uri->eq($req));
