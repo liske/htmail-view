@@ -32,7 +32,9 @@ use URI;
 use warnings;
 use strict;
 
-my $version = 0.2;
+my $version = 0.3;
+
+# settings
 my %hp_allowed;
 my $hp_allowall = 0;
 
