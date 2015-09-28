@@ -34,6 +34,7 @@ use strict;
 
 my $version = 0.3;
 
+
 # settings
 my %hp_allowed;
 my $hp_allowall = 0;
@@ -46,6 +47,7 @@ my %webkit_settings = (
     q(enable-dns-prefetching) => 0,
     q(enable-private-browsing) => 1,
     );
+
 
 # gir initialization
 Glib::Object::Introspection->setup(

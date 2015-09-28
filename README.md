@@ -29,7 +29,8 @@ Prerequisites
 Installation
 ------------
 
-*htmail-view* is a self-contained perl script. On *Debian GNU/Linux* you could use the prepared **.deb** packages (see github releases).
+*htmail-view* is a self-contained perl script. On *Debian GNU/Linux* you
+could use the prepared **.deb** packages (see github releases).
 
 
 Usage
@@ -41,23 +42,25 @@ Usage
 
 `~/.muttrc`
 ```ini
-# auto convert text/html MIME type to text/plain
-auto_view text/html
-
 # prefer plain text
 alternative_order text/plain text/enriched text/html
 
-# run viewer defined in mailcap  by <return> in attach view
+# auto convert text/html MIME type to text/plain
+auto_view text/html
+
+# run viewer defined in mailcap by <return> in attach view
 bind attach <return> view-mailcap
 
-# mailcap file to use
+# mailcap file to use (optional)
 set mailcap_path="~/.mutt/mailcap"
 ```
+
+The Debian package will aready add an entry to the global mailcap file.
 
 
 #### Use htmail-view for text/html parts
 
-`~/.mutt/mailcap`
+`mailcap`
 ```bash
 text/html; htmail-view file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal;
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
@@ -66,7 +69,7 @@ text/html; w3m -I %{charset} -T text/html; copiousoutput;
 
 #### Use wmctrl wrapper (focus handling)
 
-`~/.mutt/mailcap`
+`mailcap`
 ```bash
 text/html; /usr/lib/htmail-view/wmctrl-wrapper file://%s; test=test -n "$DISPLAY"; nametemplate=%s.html; needsterminal;
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
