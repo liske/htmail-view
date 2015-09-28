@@ -156,6 +156,7 @@ my $btn_network = Gtk3::ToggleToolButton->new;
 $btn_network->set_label('Remote Content');
 $btn_network->set_icon_name('gtk-network');
 $btn_network->set_tooltip_text('Allow all external resources...');
+$btn_network->set_active($hp_allowall);
 $btn_network->signal_connect(toggled => sub {
     $hp_allowall = $btn_network->get_active || 0;
     $view->reload;
