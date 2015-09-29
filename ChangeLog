@@ -4,7 +4,7 @@ htmail-view (0.3) unstable; urgency=low
   * Enable WebKit privacy settings.
   * [Bug] Fix links with @target="_blank" did nothing.
 
--- Thomas Liske <thomas@fiasko-nw.net>  
+ -- Thomas Liske <thomas@fiasko-nw.net>  Tue, 29 Sep 2015 23:50:32 +0200
 
 htmail-view (0.2) unstable; urgency=low
 
