@@ -260,7 +260,7 @@ $view->signal_connect('navigation-policy-decision-requested' => sub {
     }
     else {
 	# ignore request (user has not clicked)
-	print STDERR "NAV-POL#IGNORE ".$request->get_uri."\n" if($opt_v);
+	print STDERR "NAV-POL#IGNORE ".$request->get_uri.' ('.$action->get_reason.")\n" if($opt_v);
     }
     
     $decision->ignore;
