@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+
+use MIME::Parser;
+use Data::Dumper;
+use File::Temp;
+
+use strict;
+use warnings;
+
+my $dir = File::Temp->newdir();
+
+my $parser = new MIME::Parser;
+$parser->output_under($dir);
+
+my $mail = $parser->parse(\*STDIN);
+
+unless($mail->is_multipart) {
+    print STDERR 'ERROR: Unexpected MIME type '.$mail->effective_type."!\n";
+    exit 1;
+}
+
+sub find_htmail {
+    my $part = shift;
+
+    if($part->effective_type eq 'text/html') {
+	print $part->bodyhandle->path,"\n";
+	if(system('htmail-view', 'file://'.$part->bodyhandle->path) == -1) {
+	    print STDERR "ERROR: Failed to run the 'htmail-viewer' command: $!\n";
+	    exit 2;
+	}
+	print STDERR "Waiting for HTMaiL-Viewer to return...\n";
+	exit 0;
+    }
+    elsif($part->is_multipart) {
+	for my $sub ($part->parts) {
+	    find_htmail($sub);
+	}
+    }
+}
+
+find_htmail($mail);
