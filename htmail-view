@@ -25,6 +25,8 @@
 #
 
 use Browser::Open qw(open_browser);
+use Cwd qw(abs_path);
+use File::Basename qw(fileparse);
 use Getopt::Std;
 use Glib::Object::Introspection;
 use URI;
@@ -126,6 +128,13 @@ unless($uri->has_recognized_scheme) {
 }
 
 
+# base path on file scheme
+my $basedir;
+if($uri->scheme eq 'file') {
+    (my $fn, $basedir) = fileparse( abs_path($uri->file) );
+}
+
+
 # GUI initialization
 my $window = Gtk3::Window->new('toplevel');
 $window->set_wmclass('htmail-view', 'HTMaiL-View');
@@ -198,6 +207,11 @@ sub check_request {
 
     # requests of the original URI should always pass
     return 1 if($hp_allowall || $uri->eq($req));
+
+    # file scheme has no host:port - use dirname
+    if($basedir and $req->scheme eq 'file') {
+	return (abs_path($req->file) =~ /^$basedir/);
+    }
 
     # allow whitelist
     return $hp_allowed{$req_hp} || 0 if($req_hp);
