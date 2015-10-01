@@ -23,7 +23,6 @@ sub find_htmail {
     my $part = shift;
 
     if($part->effective_type eq 'text/html') {
-	print $part->bodyhandle->path,"\n";
 	if(system('htmail-view', 'file://'.$part->bodyhandle->path) == -1) {
 	    print STDERR "ERROR: Failed to run the 'htmail-viewer' command: $!\n";
 	    exit 2;
