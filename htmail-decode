@@ -8,12 +8,7 @@ use File::Temp;
 use strict;
 use warnings;
 
-my $dir = File::Temp->newdir(CLEANUP => 0);
-END {
-#print "END=$dir\n";
-#print    rmtree("$dir"),"|$!\n";
-}
-
+my $dir = File::Temp->newdir;
 my $parser = new MIME::Parser;
 $parser->output_under($dir);
 
