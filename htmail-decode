@@ -2,12 +2,17 @@
 
 use MIME::Parser;
 use Data::Dumper;
+use File::Path;
 use File::Temp;
 
 use strict;
 use warnings;
 
-my $dir = File::Temp->newdir();
+my $dir = File::Temp->newdir(CLEANUP => 0);
+END {
+#print "END=$dir\n";
+#print    rmtree("$dir"),"|$!\n";
+}
 
 my $parser = new MIME::Parser;
 $parser->output_under($dir);
@@ -19,15 +24,46 @@ unless($mail->is_multipart) {
     exit 1;
 }
 
+my %cids;
+sub find_cid {
+    my $part = shift;
+    my $cid;
+
+    if($part->is_multipart) {
+	for my $sub ($part->parts) {
+	    find_cid($sub);
+	}
+    }
+    elsif($cid = $part->head->mime_attr('content-id')) {
+	$cid =~ s/(^<|>$)//g;
+	$cids{$cid} = 'file://'.$part->bodyhandle->path;
+    }
+}
+
 sub find_htmail {
     my $part = shift;
 
     if($part->effective_type eq 'text/html') {
-	if(system('htmail-view', 'file://'.$part->bodyhandle->path) == -1) {
-	    print STDERR "ERROR: Failed to run the 'htmail-viewer' command: $!\n";
+	my $pid = open(HPIPE, '|-');
+	unless(defined($pid)) {
+	    print STDERR "ERROR: Failed to fork: $!\n";
 	    exit 2;
 	}
-	print STDERR "Waiting for HTMaiL-Viewer to return...\n";
+
+	if($pid) {
+	    print HPIPE join("\n", %cids, '');
+	    close(HPIPE);
+	}
+	else {
+	    unless(exec('htmail-view', '-m', 'file://'.$part->bodyhandle->path)) {
+		print STDERR "ERROR: Failed to run 'htmail-view': $!\n";
+		exit 3;
+	    }
+	}
+
+	waitpid($pid, 0);
+	print STDERR "Waiting for HTMaiL-Viewer to return...\n\n";
+
 	exit 0;
     }
     elsif($part->is_multipart) {
@@ -37,4 +73,5 @@ sub find_htmail {
     }
 }
 
+find_cid($mail);
 find_htmail($mail);

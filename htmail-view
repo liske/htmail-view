@@ -111,7 +111,8 @@ LIC
 }
 
 our $opt_v;
-unless(getopts('v') && (scalar @ARGV) != 0) {
+our $opt_m;
+unless(getopts('vm') && (scalar @ARGV) != 0) {
     HELP_MESSAGE;
     exit 1;
 }
@@ -131,9 +132,17 @@ unless($uri->has_recognized_scheme) {
 # base path on file scheme
 my $basedir;
 if($uri->scheme eq 'file') {
-    (my $fn, $basedir) = fileparse( abs_path($uri->file) );
+    (my $fn, $basedir) = fileparse( $uri->file );
 }
 
+
+# fetch Content-IDs in MIME mode
+my %cids;
+if($opt_m) {
+    my @cids = <STDIN>;
+    chomp(@cids);
+    %cids = @cids;
+}
 
 # GUI initialization
 my $window = Gtk3::Window->new('toplevel');
@@ -242,6 +251,20 @@ $view->signal_connect('resource-request-starting' => sub {
     if(check_request($requri)) {
 	print STDERR "RES-REQ#PERMIT ".$request->get_uri."\n" if($opt_v);
 	return;
+    }
+
+    if($requri->scheme eq 'cid') {
+	if(exists($cids{ $requri->path })) {
+	    my $dest = $cids{ $requri->path };
+	    print STDERR "RES-REQ#CIDREF ".$request->get_uri." => $dest\n" if($opt_v);
+	    $request->set_uri($dest);
+	    return;
+	}
+	else {
+	    print STDERR "RES-REQ#CIDUKN ".$request->get_uri."\n" if($opt_v);
+	    $request->set_uri('about:blank');
+	    return;
+	}
     }
 
     print STDERR "RES-REQ#REJECT ".$request->get_uri."\n" if($opt_v);
