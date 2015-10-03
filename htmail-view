@@ -34,7 +34,7 @@ use URI;
 use warnings;
 use strict;
 
-my $version = 0.3;
+my $version = 0.4;
 
 
 # settings
