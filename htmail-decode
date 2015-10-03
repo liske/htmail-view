@@ -4,9 +4,63 @@ use MIME::Parser;
 use Data::Dumper;
 use File::Path;
 use File::Temp;
+use Getopt::Std;
 
 use strict;
 use warnings;
+
+my $version = 0.3;
+my @viewer_cmd = qw(htmail-view -m);
+
+# getopt stuff
+$Getopt::Std::STANDARD_HELP_VERSION++;
+
+sub HELP_MESSAGE {
+    print <<USG;
+Usage:
+
+  htmail-decode [-v]
+
+    -v		be more verbose
+
+    --help      show this help
+    --version   show version information
+
+    The raw mail is read from STDIN.
+
+USG
+}
+
+sub VERSION_MESSAGE {
+    print <<LIC;
+
+ htmail-view $version - single web page renderer based on WebKit
+
+ Authors:
+   Thomas Liske <thomas\@fiasko-nw.net>
+
+ Copyright Holder:
+   2015 (C) Thomas Liske [http://fiasko-nw.net/~thomas/]
+
+Upstream:
+  https://github.com/liske/htmail-view
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+LIC
+#/
+}
+
+our $opt_v;
+unless(getopts('v') && (scalar @ARGV) != -1) {
+    HELP_MESSAGE;
+    exit 1;
+}
+
+push(@viewer_cmd, '-v') if($opt_v);
 
 my $dir = File::Temp->newdir;
 my $parser = new MIME::Parser;
@@ -32,6 +86,7 @@ sub find_cid {
     elsif($cid = $part->head->mime_attr('content-id')) {
 	$cid =~ s/(^<|>$)//g;
 	$cids{$cid} = 'file://'.$part->bodyhandle->path;
+	print STDERR "FINDCID#CIDREF $cid => $cids{$cid}\n" if($opt_v);
     }
 }
 
@@ -50,7 +105,8 @@ sub find_htmail {
 	    close(HPIPE);
 	}
 	else {
-	    unless(exec('htmail-view', '-m', 'file://'.$part->bodyhandle->path)) {
+	    print STDERR "TXTHTML#VIEWER ".join(' ', @viewer_cmd, 'file://'.$part->bodyhandle->path)." \n" if($opt_v);
+	    unless(exec(@viewer_cmd, 'file://'.$part->bodyhandle->path)) {
 		print STDERR "ERROR: Failed to run 'htmail-view': $!\n";
 		exit 3;
 	    }
