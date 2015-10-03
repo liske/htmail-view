@@ -1,8 +1,9 @@
 htmail-view (0.4) unstable; urgency=low
 
-  * htmail-decode: MIME decoder launching htmail-viewer
-  * htmail-view: add MIME mode allowing to access resources referenced
+  * [htmail-decode] MIME decoder launching htmail-viewer.
+  * [htmail-view] Add MIME mode allowing to access resources referenced
     by Content-IDs (used by htmail-decode).
+  * [htmail-view] Add print dialog.
 
  -- Thomas Liske <thomas@fiasko-nw.net>  
 
