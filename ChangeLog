@@ -4,6 +4,8 @@ htmail-view (0.4) unstable; urgency=low
   * [htmail-view] Add MIME mode allowing to access resources referenced
     by Content-IDs (used by htmail-decode).
   * [htmail-view] Add print dialog.
+  * [htmail-view] Keep focus on WebKit view to enable scrolling by
+    keyboard.
 
  -- Thomas Liske <thomas@fiasko-nw.net>  
 
