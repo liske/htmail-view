@@ -1,0 +1,33 @@
+.TH HTMAIL-VIEW "1" "October 2015" "htmail-view " "User Commands"
+.SH NAME
+htmail-view \- single web page renderer based on WebKit
+.SH SYNOPSIS
+.B htmail-decode
+[\-v]
+.SH DESCRIPTION
+Web page renderer based on WebKit. In contrast to a ordenary WebKit-based
+browser, htmail-view will prevent loading remote content while showing
+a single web page (i.e. from a local file).
+
+It was written to be called from *mutt* to view HTML mails. It tries to
+protect the users privacy by not loading remote resources. The default
+browser will be used if the user follows a link.
+.SH OPTIONS
+.PP
+.IP "-v"
+be more verbose
+.IP "--help"
+show help
+.IP "--version"
+show version information
+.SH "AUTHOR"
+Thomas Liske <thomas@fiasko\-nw.net>
+.SH "COPYRIGHT"
+2015 (C) Thomas Liske [http://fiasko\-nw.net/~thomas/]
+.PP
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+.SH "UPSTREAM"
+https://github.com/liske/htmail-view
