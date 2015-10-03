@@ -248,11 +248,6 @@ $view->signal_connect('resource-request-starting' => sub {
     my ($view, $frame, $resource, $request, $response) = @_;
 
     my $requri = URI->new($request->get_uri, $uri->scheme);
-    if(check_request($requri)) {
-	print STDERR "RES-REQ#PERMIT ".$request->get_uri."\n" if($opt_v);
-	return;
-    }
-
     if($requri->scheme eq 'cid') {
 	if(exists($cids{ $requri->path })) {
 	    my $dest = $cids{ $requri->path };
@@ -265,6 +260,11 @@ $view->signal_connect('resource-request-starting' => sub {
 	    $request->set_uri('about:blank');
 	    return;
 	}
+    }
+
+    if(check_request($requri)) {
+	print STDERR "RES-REQ#PERMIT ".$request->get_uri."\n" if($opt_v);
+	return;
     }
 
     print STDERR "RES-REQ#REJECT ".$request->get_uri."\n" if($opt_v);
