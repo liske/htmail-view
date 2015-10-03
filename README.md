@@ -53,6 +53,10 @@ bind attach <return> view-mailcap
 
 # mailcap file to use (optional)
 set mailcap_path="~/.mutt/mailcap"
+
+
+# handover mail to htmail-view (works only for multipart mails containing text/html payload)
+macro index,pager H "<pipe-message>htmail-decode<return>" "render html mail using htmail-view"
 ```
 
 The Debian package will aready add an entry to the global mailcap file.
