@@ -7,7 +7,7 @@ htmail-view (0.4) unstable; urgency=low
   * [htmail-view] Keep focus on WebKit view to enable scrolling by
     keyboard.
 
- -- Thomas Liske <thomas@fiasko-nw.net>  Sun, 04 Oct 2015 00:50:21 +0200
+ -- Thomas Liske <thomas@fiasko-nw.net>  Sun, 04 Oct 2015 09:39:08 +0200
 
 htmail-view (0.3) unstable; urgency=low
 
