@@ -112,8 +112,8 @@ sub find_htmail {
 	    }
 	}
 
-	waitpid($pid, 0);
 	print STDERR "Waiting for HTMaiL-Viewer to return...\n\n";
+	waitpid($pid, 0);
 
 	exit 0;
     }
