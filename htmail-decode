@@ -9,7 +9,7 @@ use Getopt::Std;
 use strict;
 use warnings;
 
-my $version = 0.4;
+my $version = q(0.4.1);
 my @viewer_cmd = qw(htmail-view -m);
 
 # getopt stuff

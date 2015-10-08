@@ -1,3 +1,9 @@
+htmail-view (0.4.1) unstable; urgency=low
+
+  * [htmail-decode] Install htmail-decode into /usr/bin/.
+
+ -- Thomas Liske <thomas@fiasko-nw.net>  Thu, 08 Oct 2015 12:00:19 +0200
+
 htmail-view (0.4) unstable; urgency=low
 
   * [htmail-decode] MIME decoder launching htmail-viewer.
