@@ -68,7 +68,7 @@ $parser->output_under($dir);
 
 my $mail = $parser->parse(\*STDIN);
 
-unless($mail->is_multipart) {
+unless($mail->is_multipart || $mail->effective_type eq 'text/html') {
     print STDERR 'ERROR: Unexpected MIME type '.$mail->effective_type."!\n";
     exit 1;
 }

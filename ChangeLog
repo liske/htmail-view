@@ -1,3 +1,9 @@
+htmail-view (0.5) unstable; urgency=low
+
+  * [htmail-decode] Handle non-multipart messages (text/html).
+
+ -- Thomas Liske <thomas@fiasko-nw.net>  
+
 htmail-view (0.4.1) unstable; urgency=low
 
   * [htmail-decode] Install htmail-decode into /usr/bin/.
