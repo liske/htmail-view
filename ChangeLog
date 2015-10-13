@@ -1,6 +1,7 @@
 htmail-view (0.5) unstable; urgency=low
 
   * [htmail-decode] Handle non-multipart messages (text/html).
+  * [htmail-view] Remove open-link* menu items from context menu.
 
  -- Thomas Liske <thomas@fiasko-nw.net>  
 

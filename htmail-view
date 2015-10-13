@@ -341,6 +341,21 @@ $view->signal_connect('new-window-policy-decision-requested' => sub {
     return 1;
 		      });
 
+# customize context menu
+$view->signal_connect('context-menu' => sub {
+    my ($view, $default_menu, $hit_test_result, $triggered_with_keyboard, $user_data) = @_;
+
+    my ($mitems) = $default_menu->get_children;
+    foreach my $mi (@$mitems) {
+	my $action = WebKit::context_menu_item_get_action($mi);
+	$default_menu->remove($mi) if(
+	    grep { $_ eq $action } qw(open-link open-link-in-new-window download-link-to-disk)
+	    );
+    }
+
+    return 0;
+		      });
+
 # load initial site
 $view->load_uri($uri->as_string);
 
