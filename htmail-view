@@ -135,7 +135,6 @@ if($uri->scheme eq 'file') {
     (my $fn, $basedir) = fileparse( $uri->file );
 }
 
-
 # fetch Content-IDs in MIME mode
 my %cids;
 if($opt_m) {
@@ -143,6 +142,7 @@ if($opt_m) {
     chomp(@cids);
     %cids = @cids;
 }
+
 
 # GUI initialization
 my $window = Gtk3::Window->new('toplevel');
@@ -191,10 +191,25 @@ $btn_print->signal_connect(clicked => sub {
     $view->get_main_frame->print;
 });
 
+my $btn_detach;
+if($opt_m) {
+    $btn_detach = Gtk3::ToolButton->new;
+    $btn_detach->set_label("Detach");
+    $btn_detach->set_icon_name('go-jump');
+    $btn_detach->set_tooltip_text('Detach from calling process.');
+    $btn_detach->signal_connect(clicked => sub {
+        close(STDOUT);
+        close(STDERR);
+	kill('USR1', getppid);
+	$btn_detach->set_sensitive(0);
+	$btn_detach->set_visible(0);
+				});
+}
 
 $toolbar->insert($btn_close, 0);
 $toolbar->insert($btn_network, 1);
 $toolbar->insert($btn_print, 2);
+$toolbar->insert($btn_detach, 3) if($opt_m);
 
 my $accel = Gtk3::AccelGroup->new;
 $window->add_accel_group($accel);
@@ -212,6 +227,7 @@ $window->signal_connect(destroy => sub { Gtk3::main_quit(); });
 $btn_close->add_accelerator("clicked", $accel, ord('Q'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
 $btn_network->get_child->add_accelerator("clicked", $accel, ord('R'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
 $btn_print->get_child->add_accelerator("clicked", $accel, ord('P'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE');
+$btn_detach->get_child->add_accelerator("clicked", $accel, ord('D'), 'GDK_META_MASK', 'GTK_ACCEL_VISIBLE') if($opt_m);
 
 
 # WebKit privacy tuning

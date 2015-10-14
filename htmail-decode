@@ -5,6 +5,7 @@ use Data::Dumper;
 use File::Path;
 use File::Temp;
 use Getopt::Std;
+use POSIX qw(setsid);
 
 use strict;
 use warnings;
@@ -62,11 +63,36 @@ unless(getopts('v') && (scalar @ARGV) != -1) {
 
 push(@viewer_cmd, '-v') if($opt_v);
 
+# prepare detach from session
+$SIG{USR1} = sub {
+    exit 0;
+};
+
+my $fork = fork();
+die "Cannot fork: $!\n" unless(defined($fork));
+
+if($fork) {
+    waitpid($fork, 0);
+    exit(0);
+}
+
+# prepare detach
+$SIG{USR1} = sub {
+    close(STDOUT);
+    close(STDERR);
+    kill('USR1', getppid);
+};
+
+# detach session
+setsid;
+
+# parse message via stdin
 my $dir = File::Temp->newdir;
 my $parser = new MIME::Parser;
 $parser->output_under($dir);
 
 my $mail = $parser->parse(\*STDIN);
+close(STDIN);
 
 unless($mail->is_multipart || $mail->effective_type eq 'text/html') {
     print STDERR 'ERROR: Unexpected MIME type '.$mail->effective_type."!\n";
@@ -94,34 +120,39 @@ sub find_htmail {
     my $part = shift;
 
     if($part->effective_type eq 'text/html') {
-	my $pid = open(HPIPE, '|-');
-	unless(defined($pid)) {
-	    print STDERR "ERROR: Failed to fork: $!\n";
-	    exit 2;
-	}
-
-	if($pid) {
-	    print HPIPE join("\n", %cids, '');
-	    close(HPIPE);
-	}
-	else {
-	    print STDERR "TXTHTML#VIEWER ".join(' ', @viewer_cmd, 'file://'.$part->bodyhandle->path)." \n" if($opt_v);
-	    unless(exec(@viewer_cmd, 'file://'.$part->bodyhandle->path)) {
-		print STDERR "ERROR: Failed to run 'htmail-view': $!\n";
-		exit 3;
-	    }
-	}
-
-	print STDERR "Waiting for HTMaiL-Viewer to return...\n\n";
-	waitpid($pid, 0);
-
-	exit 0;
+	&launch_viewer($part);
     }
     elsif($part->is_multipart) {
 	for my $sub ($part->parts) {
 	    find_htmail($sub);
 	}
     }
+}
+
+sub launch_viewer {
+    my $part = shift;
+
+    my $pid = open(HPIPE, '|-');
+    unless(defined($pid)) {
+	print STDERR "ERROR: Failed to fork: $!\n";
+	exit 2;
+    }
+
+    if($pid) {
+	print HPIPE join("\n", %cids, '');
+	close(HPIPE);
+    }
+    else {
+	print STDERR "TXTHTML#VIEWER ".join(' ', @viewer_cmd, 'file://'.$part->bodyhandle->path)." \n" if($opt_v);
+	unless(exec(@viewer_cmd, 'file://'.$part->bodyhandle->path)) {
+	    print STDERR "ERROR: Failed to run 'htmail-view': $!\n";
+	    exit 3;
+	}
+    }
+
+    print STDERR "Waiting for HTMaiL-Viewer to return...\n\n";
+    waitpid($pid, 0);
+    exit(0);
 }
 
 find_cid($mail);
