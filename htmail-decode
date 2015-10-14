@@ -10,7 +10,7 @@ use POSIX qw(setsid);
 use strict;
 use warnings;
 
-my $version = q(0.4.1);
+my $version = q(0.5);
 my @viewer_cmd = qw(htmail-view -m);
 
 # getopt stuff
