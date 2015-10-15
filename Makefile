@@ -7,7 +7,7 @@ install: all
 	mkdir -p "$(DESTDIR)/usr/lib/htmail-view"
 	cp wmctrl-winid "$(DESTDIR)/usr/lib/htmail-view/"
 	cp wmctrl-wrapper "$(DESTDIR)/usr/lib/htmail-view/"
-	mkdir -p "$(DESTDIR)/etc/Muttrc.d/htmail-view.rc"
-	cp ex/htmail-view.rc "$(DESTDIR)/etc/Muttrc.d/htmail-view.rc/"
+	mkdir -p "$(DESTDIR)/etc/Muttrc.d"
+	cp ex/htmail-view.rc "$(DESTDIR)/etc/Muttrc.d/"
 
 clean:
