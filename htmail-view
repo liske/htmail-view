@@ -58,6 +58,11 @@ Glib::Object::Introspection->setup(
     package => 'Gtk3');
 
 Glib::Object::Introspection->setup(
+    basename => 'Gdk',
+    version => '3.0',
+    package => 'Gdk3');
+
+Glib::Object::Introspection->setup(
     basename => 'WebKit',
     version => '3.0',
     package => 'WebKit');
@@ -152,6 +157,7 @@ $window->set_title($uri->as_string." - HTMaiL-View");
 $window->set_icon_name('text-html');
 my $box = Gtk3::Overlay->new;
 my $box2 = Gtk3::Overlay->new;
+my $box3 = Gtk3::Overlay->new;
 
 my $scrolls = Gtk3::ScrolledWindow->new;
 my $view = WebKit::WebView->new;
@@ -162,9 +168,11 @@ $label->set_halign('GTK_ALIGN_CENTER');
 $label->set_valign('GTK_ALIGN_END');
 
 my $toolbar = Gtk3::Toolbar->new;
+$toolbar->set_style('icons');
 $toolbar->set_halign('GTK_ALIGN_CENTER');
 $toolbar->set_valign('GTK_ALIGN_START');
 $toolbar->set_icon_size('GTK_ICON_SIZE_SMALL_TOOLBAR');
+$toolbar->override_background_color('normal', Gdk3::RGBA->new(0, 0, 0, 0));
 
 my $btn_close = Gtk3::ToolButton->new;
 $btn_close->set_label("Quit");
