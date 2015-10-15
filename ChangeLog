@@ -3,6 +3,7 @@ htmail-view (0.5) unstable; urgency=low
   * [htmail-decode] Handle non-multipart messages (text/html).
   * [htmail-view] Remove open-link* menu items from context menu.
   * [htmail-view] Remove background of toolbar.
+  * [htmail-view] Workaround for URI 1.60: missing has_recognized_scheme method.
   * [htmail-*] Allow detach htmail-decode/-view from terminal.
 
  -- Thomas Liske <thomas@fiasko-nw.net>  

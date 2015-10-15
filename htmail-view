@@ -128,7 +128,8 @@ my $uri = URI->new(shift);
 my $uri_hp = eval { $uri->host_port; };
 $hp_allowed{$uri_hp}++ if($uri_hp);
 
-unless($uri->has_recognized_scheme) {
+# workaround for URI 1.60 (missing has_recognized_scheme method)
+if(ref $uri eq q(URI::_generic)) {
     print STDERR "ERROR: missing or unsupported scheme in URI!\n";
     exit 1;
 }
