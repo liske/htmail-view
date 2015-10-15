@@ -5,8 +5,9 @@ htmail-view (0.5) unstable; urgency=low
   * [htmail-view] Remove background of toolbar.
   * [htmail-view] Workaround for URI 1.60: missing has_recognized_scheme method.
   * [htmail-*] Allow detach htmail-decode/-view from terminal.
+  * Ship global muttrc config snippet.
 
- -- Thomas Liske <thomas@fiasko-nw.net>  Thu, 15 Oct 2015 23:06:49 +0200
+ -- Thomas Liske <thomas@fiasko-nw.net>  Thu, 15 Oct 2015 23:14:28 +0200
 
 htmail-view (0.4.1) unstable; urgency=low
 

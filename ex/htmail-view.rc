@@ -1,0 +1,4 @@
+# -*-muttrc-*-
+
+# H - render html mail using htmail-view
+macro index,pager H "<pipe-message>htmail-decode<return>" "render html mail using htmail-view"
