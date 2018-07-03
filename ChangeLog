@@ -1,3 +1,9 @@
+htmail-view (0.5.1) unstable; urgency=low
+
+  * Add missing dependency
+
+ -- Nicolas Porcel <nicolasporcel06@gmail.com>  Mon, 02 Jul 2018 10:38:04 +0200
+
 htmail-view (0.5) unstable; urgency=low
 
   * [htmail-decode] Handle non-multipart messages (text/html).
