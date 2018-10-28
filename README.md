@@ -19,10 +19,9 @@ Prerequisites
 - Gtk3 gir bindings
 - WebKit gir bindings
 - Perl packages
- - Browser::Open
- - Glib::Object::Introspection
- - URI
-
+  - Browser::Open
+  - Glib::Object::Introspection
+  - URI
 - wmctrl (optional; used by wmctrl-wrapper)
 
 
