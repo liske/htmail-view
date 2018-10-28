@@ -72,8 +72,8 @@ text/html; w3m -I %{charset} -T text/html; copiousoutput;
 
 #### Use wmctrl wrapper (focus handling)
 
-The wrapper will save the window id of the currently focused window *before*
-html-view is launched. After html-view has been terminated it will try
+The wrapper will save the window id of the currently focused window **before**
+*htmail-view* is launched. After *htmail-view* has been terminated it will try
 to restore the focused window.
 
 `mailcap`
