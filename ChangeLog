@@ -2,7 +2,7 @@ htmail-view (0.6) unstable; urgency=low
 
   * [htmail-view] Port to WebKit2.
 
- -- Thomas Liske <thomas@fiasko-nw.net>  
+ -- Thomas Liske <thomas@fiasko-nw.net>  Sat, 20 Jul 2019 12:43:08 +0200
 
 htmail-view (0.5.1) unstable; urgency=low
 

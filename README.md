@@ -17,7 +17,7 @@ Prerequisites
 -------------
 
 - Gtk3 gir bindings
-- WebKit gir bindings
+- WebKit2 gir bindings
 - Perl packages
   - Browser::Open
   - Glib::Object::Introspection

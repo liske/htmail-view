@@ -4,3 +4,4 @@ debian/htmail-view.debhelper.log
 debian/htmail-view.substvars
 debian/htmail-view/
 debian/files
+debian/.debhelper/
