@@ -63,9 +63,9 @@ Glib::Object::Introspection->setup(
     package => 'Gdk3');
 
 Glib::Object::Introspection->setup(
-    basename => 'WebKit',
-    version => '3.0',
-    package => 'WebKit');
+    basename => 'WebKit2',
+    version => '4.0',
+    package => 'WebKit2');
 
 
 # initialize GTK and parse GTK standard command line options
@@ -161,7 +161,7 @@ my $box2 = Gtk3::Overlay->new;
 my $box3 = Gtk3::Overlay->new;
 
 my $scrolls = Gtk3::ScrolledWindow->new;
-my $view = WebKit::WebView->new;
+my $view = WebKit2::WebView->new;
 $scrolls->add($view);
 
 my $label = Gtk3::Label->new('');
@@ -267,22 +267,28 @@ sub check_request {
 }
 
 # window title
-$view->signal_connect('title-changed' => sub {
-    my ($view, $frame, $text) = @_;
+$view->signal_connect('load-changed' => sub {
+    my ($view, $load_event) = @_;
 
-    $window->set_title("$text - HTMaiL-View");
+    my $t = $view->get_title();
+    $window->set_title("$t - HTMaiL-View") if ($t);
 });
 
 # show destination while hovering a link
-$view->signal_connect('hovering-over-link' => sub {
-    my ($view, $title, $uri) = @_;
+$view->signal_connect('mouse-target-changed' => sub {
+    my ($view, $hit_test_result, $modifiers) = @_;
 
-    $label->set_label($uri || '');
+    if($hit_test_result->context_is_link) {
+        $label->set_label($hit_test_result->get_link_uri);
+    }
+    else {
+        $label->set_label('');
+    }
 });
 
 # intercept any resource requests
-$view->signal_connect('resource-request-starting' => sub {
-    my ($view, $frame, $resource, $request, $response) = @_;
+$view->signal_connect('resource-load-started' => sub {
+    my ($view, $resource, $request) = @_;
 
     my $requri = URI->new($request->get_uri, $uri->scheme);
     if($requri->scheme eq 'cid') {
@@ -318,53 +324,56 @@ sub check_navpol {
     return 0;
 }
 
-$view->signal_connect('navigation-policy-decision-requested' => sub {
-    my ($view, $frame, $request, $action, $decision) = @_;
+$view->signal_connect('decide-policy' => sub {
+    my ($view, $decision, $type) = @_;
 
-    my $requri = URI->new($request->get_uri, $uri->scheme);
-    if(check_navpol($requri)) {
-	print STDERR "NAV-POL#INTERN ".$request->get_uri."\n" if($opt_v);
-	return 0;
-    }
+    if($type eq "navigation-action") {
+        my $request = $decision->get_request;
 
-    if($action->get_reason eq 'link-clicked') {
-	# launch external browser
-	print STDERR "NAV-POL#EXTERN ".$request->get_uri."\n" if($opt_v);
-	open_browser($request->get_uri);
+        my $requri = URI->new($request->get_uri, $uri->scheme);
+        if(check_navpol($requri)) {
+        	print STDERR "NAV-POL#INTERN ".$request->get_uri."\n" if($opt_v);
+            $decision->use;
+        	return 0;
+        }
+
+        if($decision->get_navigation_action->get_navigation_type eq "link-clicked") {
+        	# launch external browser
+        	print STDERR "NAV-POL#EXTERN ".$request->get_uri."\n" if($opt_v);
+        	open_browser($request->get_uri);
+        }
+        else {
+        	# ignore request (user has not clicked)
+        	print STDERR "NAV-POL#IGNORE ".$request->get_uri.' ('.$decision->get_navigation_action->get_navigation_type.")\n" if($opt_v);
+        }
+        
+        $decision->ignore;
+        return 1;
     }
-    else {
-	# ignore request (user has not clicked)
-	print STDERR "NAV-POL#IGNORE ".$request->get_uri.' ('.$action->get_reason.")\n" if($opt_v);
+    elsif($type eq "new-window-action") {
+        my $request = $decision->get_request;
+
+        my $requri = URI->new($request->get_uri, $uri->scheme);
+        if(check_navpol($requri)) {
+        	print STDERR "NEW-POL#INTIGN ".$request->get_uri."\n" if($opt_v);
+        	$decision->ignore;
+        	return 1;
+        }
+
+        if($decision->get_navigation_action->get_navigation_type eq "link-clicked") {
+        	# launch external browser
+        	print STDERR "NEW-POL#EXTERN ".$request->get_uri."\n" if($opt_v);
+        	open_browser($request->get_uri);
+        }
+        else {
+        	# ignore request (user has not clicked)
+        	print STDERR "NEW-POL#IGNORE ".$request->get_uri."\n" if($opt_v);
+        }
+
+        $decision->ignore;
+        return 1;
     }
-    
-    $decision->ignore;
-    return 1;
 });
-
-# <a target="_blank"> stuff
-$view->signal_connect('new-window-policy-decision-requested' => sub {
-    my ($view, $frame, $request, $action, $decision) = @_;
-
-    my $requri = URI->new($request->get_uri, $uri->scheme);
-    if(check_navpol($requri)) {
-	print STDERR "NEW-POL#INTIGN ".$request->get_uri."\n" if($opt_v);
-	$decision->ignore;
-	return 1;
-    }
-
-    if($action->get_reason eq 'link-clicked') {
-	# launch external browser
-	print STDERR "NEW-POL#EXTERN ".$request->get_uri."\n" if($opt_v);
-	open_browser($request->get_uri);
-    }
-    else {
-	# ignore request (user has not clicked)
-	print STDERR "NEW-POL#IGNORE ".$request->get_uri."\n" if($opt_v);
-    }
-
-    $decision->ignore;
-    return 1;
-		      });
 
 # customize context menu
 $view->signal_connect('context-menu' => sub {

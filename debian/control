@@ -8,7 +8,7 @@ Homepage: https://github.com/liske/htmail-view
 
 Package: htmail-view
 Architecture: all
-Depends: libbrowser-open-perl, liburi-perl, libglib-object-introspection-perl, libmail-mboxparser-perl, gir1.2-gtk-3.0, gir1.2-webkit-3.0, ${misc:Depends}
+Depends: libbrowser-open-perl, liburi-perl, libglib-object-introspection-perl, libmail-mboxparser-perl, gir1.2-gtk-3.0, gir1.2-webkit2-4.0, ${misc:Depends}
 Recommends: wmctrl
 Description: single web page renderer based on WebKit
  Web page renderer based on WebKit. In contrast to a ordenary WebKit-based

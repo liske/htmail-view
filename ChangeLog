@@ -1,3 +1,9 @@
+htmail-view (0.6) unstable; urgency=low
+
+  * [htmail-view] Port to WebKit2.
+
+ -- Thomas Liske <thomas@fiasko-nw.net>  
+
 htmail-view (0.5.1) unstable; urgency=low
 
   * Add missing dependency
