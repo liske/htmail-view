@@ -4,7 +4,7 @@ htmail-view
 About
 -----
 
-Web page renderer based on WebKit. In contrast to a ordenary WebKit-based
+Web page renderer based on WebKit2. In contrast to a ordenary WebKit2-based
 browser, *htmail-view* will prevent loading remote content while showing
 a single web page (i.e. from a local file).
 
