@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# HTMaiL-view - single web page renderer based on WebKit
+# HTMaiL-view - single web page renderer based on WebKit2
 #
 # Authors:
 #   Thomas Liske <thomas@fiasko-nw.net>
