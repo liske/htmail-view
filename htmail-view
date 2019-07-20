@@ -46,9 +46,11 @@ my %webkit_settings = (
     q(enable-fullscreen) => 0,
     q(enable-html5-local-storage) => 0,
     q(enable-html5-database) => 0,
+    q(enable-hyperlink-auditing) => 0,
     q(enable-dns-prefetching) => 0,
+    q(enable-java) => 0,
     q(enable-private-browsing) => 1,
-    );
+);
 
 
 # gir initialization
@@ -161,7 +163,7 @@ my $box2 = Gtk3::Overlay->new;
 my $box3 = Gtk3::Overlay->new;
 
 my $scrolls = Gtk3::ScrolledWindow->new;
-my $view = WebKit2::WebView->new;
+my $view = WebKit2::WebView->new_with_context( WebKit2::WebContext->new_ephemeral );
 $scrolls->add($view);
 
 my $label = Gtk3::Label->new('');
